@@ -1,0 +1,59 @@
+using System;
+
+abstract class Screen { }
+abstract class Processor { }
+abstract class Camera { }
+
+class OLED : Screen { }
+class Snapdragon : Processor { }
+class DualCamera : Camera { }
+
+abstract class TechProductFactory
+{
+    public abstract Screen CreateScreen();
+    public abstract Processor CreateProcessor();
+    public abstract Camera CreateCamera();
+}
+
+class SmartphoneFactory : TechProductFactory
+{
+    public override Screen CreateScreen()
+    {
+        return new OLED();
+    }
+
+    public override Processor CreateProcessor()
+    {
+        return new Snapdragon();
+    }
+
+    public override Camera CreateCamera()
+    {
+        return new DualCamera();
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        Console.Write("Enter product type (smartphone): ");
+        string productType = Console.ReadLine();
+
+        TechProductFactory productFactory;
+        switch (productType.ToLower())
+        {
+            case "smartphone":
+                productFactory = new SmartphoneFactory();
+                break;
+            default:
+                throw new ArgumentException("Invalid product type");
+        }
+
+        Screen screen = productFactory.CreateScreen();
+        Processor processor = productFactory.CreateProcessor();
+        Camera camera = productFactory.CreateCamera();
+
+        Console.WriteLine($"Product assembled with {screen.GetType().Name}, {processor.GetType().Name}, and {camera.GetType().Name}");
+    }
+}
