@@ -1,0 +1,52 @@
+using System;
+
+abstract class Graph
+{
+    public abstract void Draw();
+}
+
+class LineGraph : Graph
+{
+    public override void Draw()
+    {
+        Console.WriteLine("Drawing Line Graph");
+    }
+}
+
+class BarGraph : Graph
+{
+    public override void Draw()
+    {
+        Console.WriteLine("Drawing Bar Graph");
+    }
+}
+
+class GraphFactory
+{
+    public Graph CreateGraph(string type)
+    {
+        switch (type.ToLower())
+        {
+            case "line":
+                return new LineGraph();
+            case "bar":
+                return new BarGraph();
+            default:
+                throw new ArgumentException("Invalid graph type");
+        }
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        Console.Write("Enter graph type (line/bar): ");
+        string graphType = Console.ReadLine();
+
+        GraphFactory graphFactory = new GraphFactory();
+        Graph graph = graphFactory.CreateGraph(graphType);
+
+        graph.Draw();
+    }
+}
