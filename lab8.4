@@ -1,0 +1,55 @@
+using System;
+using System.Collections.Generic;
+
+interface IDataPrototype
+{
+    IDataPrototype Clone();
+}
+
+class Data : IDataPrototype
+{
+    public string Format { get; set; }
+    public Dictionary<string, string> Content { get; set; }
+
+    public IDataPrototype Clone()
+    {
+        return new Data { Format = this.Format, Content = new Dictionary<string, string>(this.Content) };
+    }
+}
+
+class DataAdapter
+{
+    public Data AdaptData(IDataPrototype data, string targetFormat)
+    {
+        if (data.Format == "CSV" && targetFormat == "JSON")
+        {
+            Console.WriteLine("Converting CSV to JSON");
+        }
+        else if (data.Format == "JSON" && targetFormat == "XML")
+        {
+            Console.WriteLine("Converting JSON to XML");
+        }
+
+        return new Data { Format = targetFormat, Content = data.Content };
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        Data prototypeData = new Data
+        {
+            Format = "CSV",
+            Content = new Dictionary<string, string> { { "Name", "John" }, { "Age", "30" } }
+        };
+
+        DataAdapter dataAdapter = new DataAdapter();
+
+        Console.Write("Enter target format (JSON/XML): ");
+        string targetFormat = Console.ReadLine();
+
+        Data adaptedData = dataAdapter.AdaptData(prototypeData, targetFormat);
+        Console.WriteLine($"Adapted Data - Format: {adaptedData.Format}, Content: {string.Join(", ", adaptedData.Content)}");
+    }
+}
